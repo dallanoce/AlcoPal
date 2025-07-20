@@ -1,0 +1,10 @@
+<!-- res/values/strings.xml -->
+<resources>
+    <string name="app_name">AlcoPal</string>
+    <string name="add_drink">Add Drink</string>
+    <string name="bac_level">BAC Level</string>
+    <string name="time_to_sober">Time to Sober</string>
+    <string name="user_profile">User Profile</string>
+    <!-- Add all other strings your app uses -->
+</resources>
+        

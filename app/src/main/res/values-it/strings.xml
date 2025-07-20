@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AlcoPal</string>
+    <string name="add_drink">Aggiungi Drink</string>
+    <string name="bac_level">Tasso Alcolemico</string>
+    <string name="time_to_sober">Sobrio tra</string>
+    <string name="user_profile">Profilo Utente</string>
+</resources>
