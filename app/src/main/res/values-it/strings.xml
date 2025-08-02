@@ -5,4 +5,6 @@
     <string name="bac_level">Tasso Alcolemico</string>
     <string name="time_to_sober">Sobrio tra</string>
     <string name="user_profile">Profilo Utente</string>
+    <string name="gender">Sesso</string>
+    <string name="enter_details_bac_calculation">Inserisci i tuoi dettagli per un calcolo accurato del BAC:</string>
 </resources>

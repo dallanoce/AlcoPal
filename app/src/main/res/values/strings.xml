@@ -5,6 +5,8 @@
     <string name="bac_level">BAC Level</string>
     <string name="time_to_sober">Time to Sober</string>
     <string name="user_profile">User Profile</string>
+    <string name="gender">Gender</string>
+    <string name="enter_details_bac_calculation">Enter your details for accurate BAC calculation:</string>
     <!-- Add all other strings your app uses -->
 </resources>
         
