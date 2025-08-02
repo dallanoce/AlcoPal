@@ -14,7 +14,8 @@ class BACViewModel : ViewModel() {
     private val bacCalculator = BACCalculator()
 
     private val _drinks = mutableListOf<Drink>()
-    private var _userProfile: UserProfile? = null
+    private val _userProfile = MutableLiveData<UserProfile?>(null)
+    val userProfile: LiveData<UserProfile?> = _userProfile
 
     private val _currentBAC = MutableLiveData<BACReading>()
     val currentBAC: LiveData<BACReading> = _currentBAC
@@ -32,7 +33,7 @@ class BACViewModel : ViewModel() {
     val hasUserProfile: LiveData<Boolean> = _hasUserProfile
 
     init {
-        updateBACReading()
+        updateBACReading() // This will also initialize _hasUserProfile
     }
 
     fun addDrink(drink: Drink) {
@@ -50,29 +51,32 @@ class BACViewModel : ViewModel() {
         updateBACReading()
     }
 
+    // Add this method
+    fun getUserProfile(): UserProfile? {
+        return _userProfile.value
+    }
     fun setUserProfile(profile: UserProfile) {
-        _userProfile = profile
-        _hasUserProfile.value = true
-        updateBACReading()
+        _userProfile.value = profile
+        updateBACReading() // This will update _hasUserProfile
     }
 
     fun getDrinks(): List<Drink> = _drinks.toList()
 
-    fun getUserProfile(): UserProfile? = _userProfile
+    fun getCurrentUserProfile(): UserProfile? = _userProfile.value
 
     private fun updateBACReading() {
         _drinkCount.value = _drinks.size
 
-        val profile = _userProfile
+        val profile = _userProfile.value
         if (profile == null) {
             _currentBAC.value = BACReading(0.0, System.currentTimeMillis(), BACStatus.SOBER)
             _timeToSober.value = 0L
             _timeToLegal.value = 0L
-            _hasUserProfile.value = false
+            _hasUserProfile.value = false // Update hasUserProfile
             return
         }
 
-        _hasUserProfile.value = true
+        _hasUserProfile.value = true // Update hasUserProfile
         val bacReading = bacCalculator.calculateBAC(_drinks, profile)
         _currentBAC.value = bacReading
 

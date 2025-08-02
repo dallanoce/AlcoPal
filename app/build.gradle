@@ -41,6 +41,9 @@ dependencies {
     implementation libs.androidx.core.ktx
     implementation libs.androidx.appcompat
     implementation libs.material
+    implementation 'androidx.compose.material:material-icons-core:1.7.0-beta01'
+    implementation libs.androidx.fragment
+    implementation libs.androidx.recyclerview// added this line
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core

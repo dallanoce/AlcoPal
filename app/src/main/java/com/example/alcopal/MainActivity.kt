@@ -1,33 +1,19 @@
 package com.example.alcopal
 
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.alcopal.ui.BACViewModel
 import com.example.alcopal.ui.AddDrinkDialog
 import com.example.alcopal.ui.UserProfileDialog
 import com.example.alcopal.data.UserProfile
 import com.example.alcopal.data.Gender
-import com.example.alcopal.data.Drink
-import java.text.DecimalFormat
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: BACViewModel
-
-    // Views
-    private lateinit var tvBacValue: TextView
-    private lateinit var tvBacStatus: TextView
-    private lateinit var tvDrinkCount: TextView
-    private lateinit var tvTimeToSober: TextView
-    private lateinit var tvTimeToLegal: TextView
-    private lateinit var tvSetupPrompt: TextView
-    private lateinit var btnAddDrink: Button
-    private lateinit var btnClearDrinks: Button
-    private lateinit var btnSetProfile: Button
+    lateinit var viewModel: BACViewModel // Made public for HomeFragment access
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,9 +21,31 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[BACViewModel::class.java]
 
-        initViews()
-        setupClickListeners()
-        observeViewModel()
+        val bottomNavView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, HomeFragment())
+                .commit()
+        }
+
+        bottomNavView.setOnItemSelectedListener { item ->
+            var selectedFragment: Fragment? = null
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    selectedFragment = HomeFragment()
+                }
+                R.id.navigation_profile -> {
+                    selectedFragment = ProfileFragment()
+                }
+            }
+            if (selectedFragment != null) {
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, selectedFragment)
+                    .commit()
+            }
+            true
+        }
 
         // Only set default profile if none exists
         if (viewModel.getUserProfile() == null) {
@@ -45,33 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViews() {
-        tvBacValue = findViewById(R.id.tvBacValue)
-        tvBacStatus = findViewById(R.id.tvBacStatus)
-        tvDrinkCount = findViewById(R.id.tvDrinkCount)
-        tvTimeToSober = findViewById(R.id.tvTimeToSober)
-        tvTimeToLegal = findViewById(R.id.tvTimeToLegal)
-        tvSetupPrompt = findViewById(R.id.tvSetupPrompt)
-        btnAddDrink = findViewById(R.id.btnAddDrink)
-        btnClearDrinks = findViewById(R.id.btnClearDrinks)
-        btnSetProfile = findViewById(R.id.btnSetProfile)
-    }
-
-    private fun setupClickListeners() {
-        btnAddDrink.setOnClickListener {
-            showAddDrinkDialog()
-        }
-
-        btnClearDrinks.setOnClickListener {
-            viewModel.clearDrinks()
-        }
-
-        btnSetProfile.setOnClickListener {
-            showUserProfileDialog()
-        }
-    }
-
-    private fun showAddDrinkDialog() {
+    fun showAddDrinkDialog() { // Made public for HomeFragment access
         val dialog = AddDrinkDialog()
         dialog.setOnDrinkAddedListener { drink ->
             viewModel.addDrink(drink)
@@ -79,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         dialog.show(supportFragmentManager, "add_drink")
     }
 
-    private fun showUserProfileDialog() {
+    fun showUserProfileDialog() { // Made public for HomeFragment access
         val dialog = UserProfileDialog()
         dialog.setCurrentProfile(viewModel.getUserProfile())
         dialog.setOnProfileSetListener { profile ->
@@ -88,51 +70,7 @@ class MainActivity : AppCompatActivity() {
         dialog.show(supportFragmentManager, "user_profile")
     }
 
-    private fun observeViewModel() {
-        viewModel.currentBAC.observe(this) { bacReading ->
-            val decimalFormat = DecimalFormat("0.000")
-            tvBacValue.text = decimalFormat.format(bacReading.bac)
-            tvBacStatus.text = bacReading.status.description
-
-            // You can set colors here if needed
-            // tvBacStatus.setTextColor(bacReading.status.color)
-        }
-
-        viewModel.drinkCount.observe(this) { count ->
-            tvDrinkCount.text = "Drinks: $count"
-        }
-
-        viewModel.timeToSober.observe(this) { timeMs ->
-            tvTimeToSober.text = if (timeMs > 0) {
-                "Time to sober: ${formatTime(timeMs)}"
-            } else {
-                "You're sober!"
-            }
-        }
-
-        viewModel.timeToLegal.observe(this) { timeMs ->
-            tvTimeToLegal.text = if (timeMs > 0) {
-                "Time to legal limit: ${formatTime(timeMs)}"
-            } else {
-                "Below legal limit"
-            }
-        }
-
-        viewModel.hasUserProfile.observe(this) { hasProfile ->
-            // Show/hide UI elements based on whether user has set up profile
-            val visibility = if (hasProfile) View.VISIBLE else View.GONE
-            tvDrinkCount.visibility = visibility
-            tvTimeToSober.visibility = visibility
-            tvTimeToLegal.visibility = visibility
-            btnAddDrink.visibility = visibility
-            btnClearDrinks.visibility = visibility
-
-            tvSetupPrompt.visibility = if (hasProfile) View.GONE else View.VISIBLE
-        }
-    }
-
     private fun setupDefaultProfile() {
-        // Set a default profile so the app works immediately
         val defaultProfile = UserProfile(
             weight = 70.0, // 70kg
             gender = Gender.MALE,
@@ -141,14 +79,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.setUserProfile(defaultProfile)
     }
 
-    private fun formatTime(timeMs: Long): String {
-        val hours = timeMs / (1000 * 60 * 60)
-        val minutes = (timeMs % (1000 * 60 * 60)) / (1000 * 60)
-
-        return when {
-            hours > 0 -> "${hours}h ${minutes}m"
-            minutes > 0 -> "${minutes}m"
-            else -> "< 1m"
-        }
-    }
+    // formatTime is not directly used by MainActivity anymore, can be moved or kept if other parts of activity need it.
+    // For now, it will be moved to HomeFragment as it was used for UI there.
 }
