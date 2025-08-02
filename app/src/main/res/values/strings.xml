@@ -9,6 +9,7 @@
     <string name="enter_details_bac_calculation">Enter your details for accurate BAC calculation:</string>
     <string name="navigation_home">Home</string>
     <string name="navigation_profile">Profile</string>
+    <string name="navigation_history">History</string>
     <!-- Add all other strings your app uses -->
 </resources>
         

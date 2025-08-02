@@ -9,4 +9,5 @@
     <string name="enter_details_bac_calculation">Inserisci i tuoi dettagli per un calcolo accurato del BAC:</string>
     <string name="navigation_home">Home</string>
     <string name="navigation_profile">Profilo</string>
+    <string name="navigation_history">Storico</string>
 </resources>

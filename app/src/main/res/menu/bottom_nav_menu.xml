@@ -4,6 +4,10 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/navigation_home" />
     <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/ic_history_black_24dp" 
+        android:title="@string/navigation_history" />
+    <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_person_black_24dp"
         android:title="@string/navigation_profile" />

@@ -10,6 +10,10 @@ import com.example.alcopal.ui.UserProfileDialog
 import com.example.alcopal.data.UserProfile
 import com.example.alcopal.data.Gender
 import com.google.android.material.bottomnavigation.BottomNavigationView
+// Ensure HistoryFragment is imported if it's in a different package,
+// or if you prefer explicit imports.
+// Assuming HistoryFragment is in com.example.alcopal package based on prior steps.
+// import com.example.alcopal.HistoryFragment 
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +41,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navigation_profile -> {
                     selectedFragment = ProfileFragment()
+                }
+                R.id.navigation_history -> { // Added this case for HistoryFragment
+                    selectedFragment = HistoryFragment()
                 }
             }
             if (selectedFragment != null) {
@@ -82,3 +89,4 @@ class MainActivity : AppCompatActivity() {
     // formatTime is not directly used by MainActivity anymore, can be moved or kept if other parts of activity need it.
     // For now, it will be moved to HomeFragment as it was used for UI there.
 }
+
